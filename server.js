@@ -22,6 +22,8 @@ app.post("/send-mail", async (req, res) =>{
     const {message, to} = req.body;
     try{
         await sendMail(message, to)
+        console.log("Email sent successfully");
+        
         res.status(200).json({
             message:`Email successfully sent to ${to}`
         })
