@@ -1,47 +1,43 @@
 const express = require("express");
-const cors = require("cors")
-require("dotenv").config()
+const cors = require("cors");
+require("dotenv").config();
 
-
-const sendMail = require("./utils/sendMail")
+const sendMail = require("./utils/sendMail");
 
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 app.use(express.json());
 
-app.get("/health", async(req, res)=>{
-     console.log(process.env.GMAIL_APP_KEY);
+app.get("/health", async (req, res) => {
+  console.log(process.env.GMAIL_APP_KEY);
+  res.status(200).json({
+    message: "server is healthy",
+  });
+});
+
+app.post("/send-mail", async (req, res) => {
+  const { message, to } = req.body;
+  console.log(message);
+
+  try {
+    await sendMail(message, to);
+    console.log("Email sent successfully");
+
     res.status(200).json({
-        "message":"server is healthy"
-    })
-})
+      message: `Email successfully sent to ${to}`,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(501).json({
+      message: "Failed to send the mail",
+    });
+  }
+});
 
-app.post("/send-mail", async (req, res) =>{
-    const {message, to} = req.body;
-    console.log(message);
-    
-    try{
-        await sendMail(message, to)
-        console.log("Email sent successfully");
-        
-        res.status(200).json({
-            message:`Email successfully sent to ${to}`
-        })
-    }catch(err){
-        console.log(err);
-        res.status(501).json({
-            message:"Failed to send the mail"
-        })
-    }
-})
+const PORT = 3000;
 
-
-const PORT = 8080;
-
-
-app.listen(PORT, ()=>{
-    console.log(`Server is running on ${PORT}`);
-    
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`);
+});

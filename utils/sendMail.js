@@ -1,24 +1,22 @@
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer");
 
 const sendMail = async (message, to) => {
+  console.log(message, to);
 
-const transporter = nodemailer.createTransport({
-    service:"gmail",
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
     auth: {
-        user: "proctor.ai.main@gmail.com",
-        pass: process.env.GMAIL_APP_KEY,
+      user: "proctor.ai.main@gmail.com",
+      pass: process.env.GMAIL_APP_KEY,
     },
-})
+  });
 
-await transporter.sendMail({
+  await transporter.sendMail({
     from: `ProctorAI`,
     to: to,
     subject: "Entry Token Proctor AI",
-    text: message
+    text: message,
   });
-
-
-}
+};
 
 module.exports = sendMail;
-
