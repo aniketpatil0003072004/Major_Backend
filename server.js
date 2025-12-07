@@ -38,7 +38,7 @@ app.post("/send-mail", async (req, res) =>{
 })
 
 
-const PORT = 8080;
+const PORT = 3000;
 
 
 app.listen(PORT, ()=>{
